@@ -44,7 +44,7 @@ public:
 					NewBlock->hashKey = sha256(temp);
 				}
 				std::cout << "nonce = "<< NewBlock->nonce << '\n';
-				NewBlock->prev_hashKey = "00000000000000000000000000000000";
+				NewBlock->prev_hashKey = "0000000000000000000000000000000000000000000000000000000000000000";
 				NewBlock->data = data;
 				NewBlock->BlockNum = 0;
 				NewBlock->next = NULL;
@@ -95,6 +95,8 @@ public:
 			cout<<"Hash Key:  "<<curr->hashKey<<endl;
 			cout<<"Previous Hash Key:  "<<curr->prev_hashKey<<endl;
 			cout<<"Nonce :"<<curr->nonce<<endl;
+			if (curr->next != NULL) {
+
 			do{
 				curr = curr->next;
 				cout<<"-------------------------------------"<<endl;
@@ -105,6 +107,7 @@ public:
 				cout<<"Nonce :"<<curr->nonce<<endl;
 				cout<<"-------------------------------------"<<endl;
 			}while(curr->next != NULL);
+		}
 		}
 	}
 	void printBlock(int num)
@@ -133,14 +136,24 @@ public:
 	}
 	void writetofile()
 	{
+		Block* curr = GenesisBlock;
+		if (curr == NULL)
+		{
+			cout<<"-------------------------------------"<<endl;
+				std::cout << "Nothing to Write" << '\n';
+			cout<<"-------------------------------------"<<endl;
+		}
+		else
+		{
 		fstream file;
 		file.open("blocks.txt", ios::out);
-		Block* curr = GenesisBlock;
 			file<<"BlockNum:  "<<curr->BlockNum<<endl;
 			file<<"Data:  "<<curr->data<<endl;
 			file<<"Hash Key:  "<<curr->hashKey<<endl;
 			file<<"Previous Hash Key:  "<<curr->prev_hashKey<<endl;
 			file<<"Nonce :"<<curr->nonce<<endl;
+			if (curr->next != NULL) {
+
 			do{
 				curr = curr->next;
 				file<<"-------------------------------------"<<endl;
@@ -151,7 +164,20 @@ public:
 				file<<"Nonce :"<<curr->nonce<<endl;
 				file<<"-------------------------------------"<<endl;
 			}while(curr->next != NULL);
+		}
 			file.close();
+		}
+	}
+	void readFromFile() {
+		fstream file;
+		string str;
+		file.open("blocks.txt",ios::in);
+		if (file.is_open()) {
+			while (!file.eof()) {
+				getline(file, str);
+				std::cout << str << '\n';
+			}
+		}
 	}
 
 };
@@ -163,54 +189,22 @@ string timestamp()
 }
 int main(){
 	chain ch;
-	bool driver = true;
-	while(driver == true)
-	{
+
 		int var,x;
 		string data;
-		cout<<"-------------------------------------"<<endl;
-		cout<<"-------------------------------------"<<endl;
-		cout<<"-------------------------------------"<<endl;
-		cout<<"---------WELCOME TO OURCOIN----------" <<endl;
-		cout<<"-------------------------------------"<<endl;
-		cout<<"-------------------------------------"<<endl;
-		cout<<"-------------------------------------"<<endl;
-		std::cout << "press 1 to make a new Ledger" << '\n';
-		std::cout << "press 2 to print Ledgers" << '\n';
-		std::cout << "press 3 to print a specific ledger" << '\n';
-		std::cout << "press 4 to write the ledgers to file" << '\n';
-		std::cout << "press 5 to quit" << '\n';
-		std::cin >> var;
-		switch (var) {
-			case 1:
-						std::cout << "enter Information" << '\n';
-						cin.ignore();
-						getline(cin, data);
-						ch.insert(data);
-						break;
-			case 2:
-						ch.print();
-						break;
-			case 3:
-						std::cout << "Enter the block number of ledger you want to print" << '\n';
-						std::cin >> x;
-						ch.printBlock(x);
-						break;
-			case 4:
-						ch.writetofile();
-						std::cout << "All ledgers writed to the file" << '\n';
-						break;
-			case 5:
-						driver = false;
-						break;
-		}
-	}
-	// ch.insert("Hello world!");
-	// ch.insert("H---->");
-	// ch.insert("e---->");
-	// ch.insert("l---->");
-	// ch.print();
-	// ch.printBlock(1);
-	// ch.writetofile();
-	return 0;
+		// cout<<"-------------------------------------"<<endl;
+		// cout<<"-------------------------------------"<<endl;
+		// cout<<"-------------------------------------"<<endl;
+		// cout<<"---------WELCOME TO OURCOIN----------" <<endl;
+		// cout<<"-------------------------------------"<<endl;
+		// cout<<"-------------------------------------"<<endl;
+		// cout<<"-------------------------------------"<<endl;
+
+	ch.insert("give me 50 ourcoins ");
+	ch.insert("give ahmed 50 ourcoins ");
+	//ch.print();
+	//ch.printBlock(1);
+	ch.writetofile();
+	ch.readFromFile();
+
 }
